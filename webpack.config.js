@@ -7,6 +7,6 @@ module.exports = {
     path: path.join(__dirname, 'docs')
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({ title: 'RingCentral Engage Voice Demo' })
   ]
 }

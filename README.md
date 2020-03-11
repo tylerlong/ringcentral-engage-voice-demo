@@ -29,4 +29,4 @@ Check [http://localhost:8080/](http://localhost:8080/).
 yarn release
 ```
 
-The output files will be generated in `./docs` folder and be hosted by GitHub pages.
+The output files will be generated in `./docs` folder and be hosted by GitHub Pages.
