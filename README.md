@@ -21,3 +21,12 @@ yarn dev
 ```
 
 Check [http://localhost:8080/](http://localhost:8080/).
+
+
+## Release
+
+```
+yarn release
+```
+
+The output files will be generated in `./docs` folder and be hosted by GitHub pages.

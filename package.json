@@ -2,6 +2,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --progress --colors",
+    "release": "webpack --progress --colors",
     "upgrade": "yarn-upgrade-all && yarn remove sip.js && yarn add sip.js@0.11.6"
   },
   "dependencies": {
