@@ -1,5 +1,7 @@
 global.SIP = require('sip.js')
 const AgentLibrary = require('../agent-library/dist/agentLibrary.js')
+const React = require('react')
+const ReactDOM = require('react-dom')
 
 const allCallbacks = [
   'addSessionNotification',
@@ -80,3 +82,13 @@ agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN
     console.log('loginAgent', args)
   })
 })
+
+class App extends React.Component {
+  render () {
+    return 'Hello world'
+  }
+}
+
+const container = document.createElement('div')
+document.body.appendChild(container)
+ReactDOM.render(<App />, container)
