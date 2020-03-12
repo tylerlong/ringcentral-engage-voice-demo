@@ -73,10 +73,10 @@ const agentLib = new AgentLibrary({
 
 agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN, 'Bearer', (...args) => {
   console.log('authenticateAgentWithRcAccessToken', args)
-  agentLib.openSocket(1364029, (...args) => {
+  agentLib.openSocket(process.env.ENGAGE_VOICE_AGENT_ID, (...args) => {
     console.log('openSocket', args)
   })
-  agentLib.loginAgent('101', ['72257'], null, ['214001'], null, false, true, (...args) => {
+  agentLib.loginAgent(process.env.ENGAGE_VOICE_AGENT_EXTENSION_NUMBER, ['72257']/* queue ids */, null, ['214001']/* skill profile id */, null, false, true, (...args) => {
     console.log('loginAgent', args)
   })
 })
