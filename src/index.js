@@ -62,7 +62,8 @@ for (const key of allCallbacks) {
 const agentLib = new AgentLibrary({
   callbacks,
   authHost: 'https://engage.ringcentral.com',
-  localTesting: true
+  localTesting: false,
+  isSecureSocket: true
 })
 
 agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN, 'Bearer', (...args) => {
