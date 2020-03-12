@@ -1,7 +1,9 @@
-global.SIP = require('sip.js')
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SIP from 'sip.js'
+
+global.SIP = SIP
 const AgentLibrary = require('../agent-library/dist/agentLibrary.js')
-const React = require('react')
-const ReactDOM = require('react-dom')
 
 const allCallbacks = [
   'addSessionNotification',
