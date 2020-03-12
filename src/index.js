@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SIP from 'sip.js'
-
-global.SIP = SIP
-const AgentLibrary = require('../agent-library/dist/agentLibrary.js')
+import AgentLibrary from '../agent-library/dist/agentLibrary.js'
 
 const allCallbacks = [
   'addSessionNotification',

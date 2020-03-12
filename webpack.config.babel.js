@@ -1,7 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 import dotenv from 'dotenv-override-true'
-import { DefinePlugin } from 'webpack'
+import { DefinePlugin, ProvidePlugin } from 'webpack'
 
 const config = {
   mode: 'development',
@@ -25,6 +25,9 @@ const config = {
     new HtmlWebpackPlugin({ title: 'RingCentral Engage Voice Demo' }),
     new DefinePlugin({
       'process.env': JSON.stringify(dotenv.config().parsed)
+    }),
+    new ProvidePlugin({
+      SIP: 'sip.js'
     })
   ]
 }
