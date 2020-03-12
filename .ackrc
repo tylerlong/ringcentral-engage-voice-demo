@@ -1,3 +1,4 @@
 --ignore-dir=agent-library
 --ignore-dir=docs
 --ignore-dir=node_modules
+--ignore-file=match:/^yarn\.lock$/
