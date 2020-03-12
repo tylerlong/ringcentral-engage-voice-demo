@@ -2,3 +2,4 @@ node_modules/
 agent-library/
 .env
 .DS_Store
+.secret

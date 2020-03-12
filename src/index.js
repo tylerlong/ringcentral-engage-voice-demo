@@ -65,13 +65,6 @@ const agentLib = new AgentLibrary({
   localTesting: true
 })
 
-// agentId=1364029
-// platformId=aws82
-// rcUserId=3058829020
-// agentLib.authenticateAgentWithUsernamePassword('xxxxxxx@gmail.com', 'xxxxxxx', 'aws82', (...args) => {
-//   console.log('authenticateAgentWithUsernamePassword', args) // cannot make it work, invalid password
-// })
-
 agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN, 'Bearer', (...args) => {
   console.log('authenticateAgentWithRcAccessToken', args)
   agentLib.openSocket(process.env.ENGAGE_VOICE_AGENT_ID, (...args) => {
@@ -83,8 +76,24 @@ agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN
 })
 
 class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { calleeNumber: undefined }
+  }
+
+  call () {
+    console.log('before call', this.state.calleeNumber)
+    agentLib.manualOutdial(this.state.calleeNumber, '6506849704', 60, 'USA', '72257')
+    console.log('after call', this.state.calleeNumber)
+  }
+
   render () {
-    return 'Hello world'
+    return (
+      <>
+        <button onClick={() => { this.call() }}>Call</button>
+        <input type='number' placeholder='1234567890' onChange={e => this.setState({ calleeNumber: e.target.value })} />
+      </>
+    )
   }
 }
 
