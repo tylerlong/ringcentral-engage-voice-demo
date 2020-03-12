@@ -60,8 +60,16 @@ for (const key of allCallbacks) {
 
 const agentLib = new AgentLibrary({
   callbacks,
-  //   authHost: 'http://localhost:81',
+  authHost: 'https://engage.ringcentral.com',
   localTesting: true
 })
 
-console.log(agentLib)
+// agentId=1364029
+// platformId=aws82
+// agentLib.authenticateAgentWithUsernamePassword('xxxxxxx@gmail.com', 'xxxxxxx', 'aws82', (...args) => {
+//   console.log('authenticateAgentWithUsernamePassword', args) // cannot make it work, invalid password
+// })
+
+agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN, 'Bearer', (...args) => {
+  console.log('authenticateAgentWithRcAccessToken', args)
+})
