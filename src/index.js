@@ -66,10 +66,17 @@ const agentLib = new AgentLibrary({
 
 // agentId=1364029
 // platformId=aws82
+// rcUserId=3058829020
 // agentLib.authenticateAgentWithUsernamePassword('xxxxxxx@gmail.com', 'xxxxxxx', 'aws82', (...args) => {
 //   console.log('authenticateAgentWithUsernamePassword', args) // cannot make it work, invalid password
 // })
 
 agentLib.authenticateAgentWithRcAccessToken(process.env.RINGCENTRAL_ACCESS_TOKEN, 'Bearer', (...args) => {
   console.log('authenticateAgentWithRcAccessToken', args)
+  agentLib.openSocket(1364029, (...args) => {
+    console.log('openSocket', args)
+  })
+  agentLib.loginAgent('101', ['72257'], null, ['214001'], null, false, true, (...args) => {
+    console.log('loginAgent', args)
+  })
 })
