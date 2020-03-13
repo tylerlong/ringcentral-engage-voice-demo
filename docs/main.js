@@ -7844,7 +7844,7 @@ var formatRegExp = /%[sdj%]/g;
 var warning = function warning() {}; // don't print warning message when in production env or node runtime
 
 
-if (typeof process !== 'undefined' && {"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g","ENGAGE_VOICE_AGENT_ID":"1364029","ENGAGE_VOICE_AGENT_EXTENSION_NUMBER":"101"} && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
+if (typeof process !== 'undefined' && {"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g"} && "development" !== 'production' && typeof window !== 'undefined' && typeof document !== 'undefined') {
   warning = function warning(type, errors) {
     if (typeof console !== 'undefined' && console.warn) {
       if (errors.every(function (e) {
@@ -68796,7 +68796,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const redirectUri = window.location.origin + window.location.pathname;
 const urlSearchParams = new URLSearchParams(new URL(window.location.href).search);
-const rc = new ringcentral_js_concise__WEBPACK_IMPORTED_MODULE_0__["default"]({"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g","ENGAGE_VOICE_AGENT_ID":"1364029","ENGAGE_VOICE_AGENT_EXTENSION_NUMBER":"101"}.RINGCENTRAL_CLIENT_ID, {"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g","ENGAGE_VOICE_AGENT_ID":"1364029","ENGAGE_VOICE_AGENT_EXTENSION_NUMBER":"101"}.RINGCENTRAL_CLIENT_SECRET, ringcentral_js_concise__WEBPACK_IMPORTED_MODULE_0__["default"].PRODUCTION_SERVER);
+const rc = new ringcentral_js_concise__WEBPACK_IMPORTED_MODULE_0__["default"]({"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g"}.RINGCENTRAL_CLIENT_ID, {"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g"}.RINGCENTRAL_CLIENT_SECRET, ringcentral_js_concise__WEBPACK_IMPORTED_MODULE_0__["default"].PRODUCTION_SERVER);
 const store = subx__WEBPACK_IMPORTED_MODULE_2__["default"].create({
   ready: false,
   token: undefined,
@@ -68826,25 +68826,28 @@ const store = subx__WEBPACK_IMPORTED_MODULE_2__["default"].create({
       return;
     }
 
+    let extensionInfo;
+
     try {
-      // make sure token is still usable
       const r = await rc.get('/restapi/v1.0/account/~/extension/~');
-      console.log(r.data);
+      extensionInfo = r.data;
+      console.log(extensionInfo);
     } catch (e) {
+      // We don't have a valid RC token
       if (e.data && (e.data.errors || []).some(error => /\btoken\b/i.test(error.message))) {
         // invalid token
         await localforage__WEBPACK_IMPORTED_MODULE_1___default.a.clear();
         window.location.reload(false);
       }
-    } // OK, we have a valid rc token
+    } // OK, we have a valid RC token
 
 
-    _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', (...args) => {
-      console.log('authenticateAgentWithRcAccessToken', args);
-      _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].openSocket({"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g","ENGAGE_VOICE_AGENT_ID":"1364029","ENGAGE_VOICE_AGENT_EXTENSION_NUMBER":"101"}.ENGAGE_VOICE_AGENT_ID, (...args) => {
+    _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
+      console.log(authenticateRequest);
+      _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].openSocket(authenticateRequest.agents[0].agentId, (...args) => {
         console.log('openSocket', args);
       });
-      _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].loginAgent({"RINGCENTRAL_CLIENT_ID":"7K-VX-tDQTOa0CQbpjSslg","RINGCENTRAL_CLIENT_SECRET":"7PJylFtnTEuhHHDd6_zpPAjzmacyvyRlimZG0TeZlJ2g","ENGAGE_VOICE_AGENT_ID":"1364029","ENGAGE_VOICE_AGENT_EXTENSION_NUMBER":"101"}.ENGAGE_VOICE_AGENT_EXTENSION_NUMBER, ['72257']
+      _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].loginAgent(extensionInfo.extensionNumber, ['72257']
       /* queue ids */
       , null, ['214001']
       /* skill profile id */
