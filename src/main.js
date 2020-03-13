@@ -1,12 +1,17 @@
 import React from 'react'
 import { Component } from 'react-subx'
 import * as R from 'ramda'
-import { Spin, Button } from 'antd'
+import { Spin, Button, Input, Divider } from 'antd'
 
 class App extends Component {
   render () {
     const store = this.props.store
-    return store.ready ? <Main store={store} /> : <Spin size='large' />
+    return (
+      <>
+        <h1>RingCentral Engage Voice Demo</h1>
+        {store.ready ? <Main store={store} /> : <Spin size='large' />}
+      </>
+    )
   }
 }
 
@@ -34,8 +39,9 @@ class Home extends Component {
     const store = this.props.store
     return (
       <>
-        <Button onClick={() => { store.makeOutboundCall(this.state.calleeNumber) }}>Call</Button>
-        <input type='number' placeholder='6508888888' onChange={e => this.setState({ calleeNumber: e.target.value })} />
+        <Input type='number' placeholder='6508888888' onChange={e => this.setState({ calleeNumber: e.target.value })} />
+        <Divider />
+        <Button block type='primary' onClick={() => { store.makeOutboundCall(this.state.calleeNumber) }}>Call</Button>
       </>
     )
   }

@@ -45,7 +45,7 @@ const store = SubX.create({
       agentLib.openSocket(authenticateRequest.agents[0].agentId, (...args) => {
         console.log('openSocket', args)
       })
-      agentLib.loginAgent(extensionInfo.extensionNumber, ['72257']/* queue ids */, null, ['214001']/* skill profile id */, null, false, true, (...args) => {
+      agentLib.loginAgent(extensionInfo.extensionNumber, null/* queue ids */, null, null/* skill profile id */, null, false, true, (...args) => {
         console.log('loginAgent', args)
       })
     })
