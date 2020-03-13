@@ -28,22 +28,24 @@ const store = SubX.create({
     if (R.isNil(rc.token())) {
       return
     }
-    try { // make sure token is still usable
+    let extensionInfo
+    try {
       const r = await rc.get('/restapi/v1.0/account/~/extension/~')
-      console.log(r.data)
-    } catch (e) {
+      extensionInfo = r.data
+      console.log(extensionInfo)
+    } catch (e) { // We don't have a valid RC token
       if (e.data && (e.data.errors || []).some(error => /\btoken\b/i.test(error.message))) { // invalid token
         await localforage.clear()
         window.location.reload(false)
       }
     }
-    // OK, we have a valid rc token
-    agentLib.authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', (...args) => {
-      console.log('authenticateAgentWithRcAccessToken', args)
-      agentLib.openSocket(process.env.ENGAGE_VOICE_AGENT_ID, (...args) => {
+    // OK, we have a valid RC token
+    agentLib.authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
+      console.log(authenticateRequest)
+      agentLib.openSocket(authenticateRequest.agents[0].agentId, (...args) => {
         console.log('openSocket', args)
       })
-      agentLib.loginAgent(process.env.ENGAGE_VOICE_AGENT_EXTENSION_NUMBER, ['72257']/* queue ids */, null, ['214001']/* skill profile id */, null, false, true, (...args) => {
+      agentLib.loginAgent(extensionInfo.extensionNumber, ['72257']/* queue ids */, null, ['214001']/* skill profile id */, null, false, true, (...args) => {
         console.log('loginAgent', args)
       })
     })
