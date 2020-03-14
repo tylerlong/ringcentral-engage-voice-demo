@@ -12,6 +12,7 @@ const rc = new RingCentral(process.env.RINGCENTRAL_CLIENT_ID, process.env.RINGCE
 const store = SubX.create({
   ready: false,
   token: undefined,
+  callerNumber: undefined,
   authorizeUri: rc.authorizeUri(redirectUri, { state: urlSearchParams.toString() }),
   async init () {
     rc.on('tokenChanged', token => {
@@ -40,6 +41,8 @@ const store = SubX.create({
       }
     }
     // OK, we have a valid RC token
+    const r2 = await rc.get('/restapi/v1.0/account/~/extension/~/phone-number')
+    this.callerNumber = r2.data.records.filter(phoneNumber => R.includes('CallerId', phoneNumber.features))[0].phoneNumber
     agentLib.authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
       console.log(authenticateRequest)
       agentLib.openSocket(authenticateRequest.agents[0].agentId, (...args) => {
@@ -52,7 +55,7 @@ const store = SubX.create({
   },
   makeOutboundCall (calleeNumber) {
     console.log('before call', calleeNumber)
-    agentLib.manualOutdial(calleeNumber, '6506849704', 60, 'USA', '72257')
+    agentLib.manualOutdial(calleeNumber, this.callerNumber, 60, 'USA', '72257')
     console.log('after call', calleeNumber)
   }
 })
