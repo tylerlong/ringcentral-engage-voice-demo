@@ -55,13 +55,19 @@ const store = SubX.create({
         agentLib.setCallback('loginPhase1Response', callbackBackup)
         console.log('loginPhase1Response')
         console.log(loginPhase1Response)
-        const dialDest = loginPhase1Response.agentSettings.dialDest
+        // const dialDest = loginPhase1Response.agentSettings.dialDest
         const availableQueues = loginPhase1Response.inboundSettings.availableQueues
         this.queueId = availableQueues[0].gateId
         const availableSkillProfiles = loginPhase1Response.inboundSettings.availableSkillProfiles
-        agentLib.loginAgent(dialDest, availableQueues.map(aq => aq.gateId), null, availableSkillProfiles.map(as => as.profileId), null, false, true, (...args) => {
+        agentLib.loginAgent('RC_SOFTPHONE', availableQueues.map(aq => aq.gateId), null, availableSkillProfiles.map(as => as.profileId), null, false, true, (...args) => {
           console.log('loginAgent')
           console.log(args)
+          agentLib.setCallback('sipRegisteredCallback', (...args) => {
+            console.log('sipRegisteredCallback')
+            console.log(args)
+          })
+          agentLib.sipInit()
+          agentLib.sipRegister()
         })
       })
     })
