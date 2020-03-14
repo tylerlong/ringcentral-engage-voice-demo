@@ -47,13 +47,15 @@ const allCallbacks = [
   'agentDailyStats',
   'campaignStats',
   'queueStats',
-  'chatQueueStats'
+  'chatQueueStats',
+  'loginPhase1Response'
 ]
 
 const callbacks = {}
 for (const key of allCallbacks) {
   callbacks[key] = (...args) => {
-    console.log(key, args)
+    console.log(key)
+    console.log(args)
   }
 }
 
