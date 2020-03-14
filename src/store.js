@@ -13,6 +13,7 @@ const store = SubX.create({
   ready: false,
   token: undefined,
   callerNumber: undefined,
+  queueId: undefined,
   authorizeUri: rc.authorizeUri(redirectUri, { state: urlSearchParams.toString() }),
   async init () {
     rc.on('tokenChanged', token => {
@@ -46,17 +47,27 @@ const store = SubX.create({
     agentLib.authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
       console.log(authenticateRequest)
       agentLib.openSocket(authenticateRequest.agents[0].agentId, (...args) => {
-        console.log('openSocket', args)
+        console.log('openSocket')
+        console.log(args)
       })
-      agentLib.loginAgent(extensionInfo.extensionNumber, null/* queue ids */, null, null/* skill profile id */, null, false, true, (...args) => {
-        console.log('loginAgent', args)
+      const callbackBackup = agentLib.getCallback('loginPhase1Response')
+      agentLib.setCallback('loginPhase1Response', loginPhase1Response => {
+        agentLib.setCallback('loginPhase1Response', callbackBackup)
+        console.log('loginPhase1Response')
+        console.log(loginPhase1Response)
+        const dialDest = loginPhase1Response.agentSettings.dialDest
+        const availableQueues = loginPhase1Response.inboundSettings.availableQueues
+        this.queueId = availableQueues[0].gateId
+        const availableSkillProfiles = loginPhase1Response.inboundSettings.availableSkillProfiles
+        agentLib.loginAgent(dialDest, availableQueues.map(aq => aq.gateId), null, availableSkillProfiles.map(as => as.profileId), null, false, true, (...args) => {
+          console.log('loginAgent')
+          console.log(args)
+        })
       })
     })
   },
   makeOutboundCall (calleeNumber) {
-    console.log('before call', calleeNumber)
-    agentLib.manualOutdial(calleeNumber, this.callerNumber, 60, 'USA', '72257')
-    console.log('after call', calleeNumber)
+    agentLib.manualOutdial(calleeNumber, this.callerNumber, 60, 'USA', this.queueId)
   }
 })
 
