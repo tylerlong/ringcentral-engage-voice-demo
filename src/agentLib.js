@@ -55,7 +55,7 @@ const callbacks = {}
 for (const key of allCallbacks) {
   callbacks[key] = (...args) => {
     console.log(key)
-    console.log(args)
+    console.log(JSON.stringify(args, null, 2))
   }
 }
 

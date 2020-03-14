@@ -34,7 +34,8 @@ const store = SubX.create({
     try {
       const r = await rc.get('/restapi/v1.0/account/~/extension/~')
       extensionInfo = r.data
-      console.log(extensionInfo)
+      console.log('extensionInfo')
+      console.log(JSON.stringify(extensionInfo, null, 2))
     } catch (e) { // We don't have a valid RC token
       if (e.data && (e.data.errors || []).some(error => /\btoken\b/i.test(error.message))) { // invalid token
         await localforage.clear()
@@ -45,26 +46,25 @@ const store = SubX.create({
     const r2 = await rc.get('/restapi/v1.0/account/~/extension/~/phone-number')
     this.callerNumber = r2.data.records.filter(phoneNumber => R.includes('CallerId', phoneNumber.features))[0].phoneNumber
     agentLib.authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
-      console.log(authenticateRequest)
+      console.log(JSON.stringify(authenticateRequest, null, 2))
       agentLib.openSocket(authenticateRequest.agents[0].agentId, (...args) => {
         console.log('openSocket')
-        console.log(args)
+        console.log(JSON.stringify(args, null, 2))
       })
       const callbackBackup = agentLib.getCallback('loginPhase1Response')
       agentLib.setCallback('loginPhase1Response', loginPhase1Response => {
         agentLib.setCallback('loginPhase1Response', callbackBackup)
         console.log('loginPhase1Response')
-        console.log(loginPhase1Response)
-        // const dialDest = loginPhase1Response.agentSettings.dialDest
+        console.log(JSON.stringify(loginPhase1Response, null, 2))
         const availableQueues = loginPhase1Response.inboundSettings.availableQueues
         this.queueId = availableQueues[0].gateId
         const availableSkillProfiles = loginPhase1Response.inboundSettings.availableSkillProfiles
         agentLib.loginAgent('RC_SOFTPHONE', availableQueues.map(aq => aq.gateId), null, availableSkillProfiles.map(as => as.profileId), null, false, true, (...args) => {
           console.log('loginAgent')
-          console.log(args)
+          console.log(JSON.stringify(args, null, 2))
           agentLib.setCallback('sipRegisteredCallback', (...args) => {
             console.log('sipRegisteredCallback')
-            console.log(args)
+            console.log(JSON.stringify(args, null, 2))
           })
           agentLib.sipInit()
           agentLib.sipRegister()
