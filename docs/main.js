@@ -3658,7 +3658,7 @@ _rotateWebRtcServer();SoftphoneService.setupWebRtcServer();if(offhookParams){if(
 //        "outboundProxy": "webphone-sip-cfintams.lab.nordigy.ru:8083"
 //    }
 // ]
-var sipInfo=_getCurrentWebRtcServerInfo();if(sipInfo!==null){var username=sipInfo.username.toLowerCase();var webRtcServer=sipInfo.transport.toLowerCase()+"://"+sipInfo.outboundProxy;// e.g. "wss://aws87-f06-ccw01.vacd.biz:8089/freeswitch";
+var sipInfo=_getCurrentWebRtcServerInfo();console.log('sipInfo');console.log(sipInfo);if(sipInfo!==null){var username=sipInfo.username.toLowerCase();var webRtcServer=sipInfo.transport.toLowerCase()+"://"+sipInfo.outboundProxy;// e.g. "wss://aws87-f06-ccw01.vacd.biz:8089/freeswitch";
 softphoneSettings.uri=utils.escapeSoftphoneUsername(username)+'@'+sipInfo.domain;softphoneSettings.wsServers=[webRtcServer];softphoneSettings.displayName=username;softphoneSettings.authorizationUser=sipInfo.authorizationId;softphoneSettings.sipPassword=sipInfo.password;softphoneSettings.sipDialDest="sip:"+softphoneSettings.uri;return{webRtcServer:webRtcServer,username:username,password:softphoneSettings.sipPassword,domain:sipInfo.domain||null,dialDest:softphoneSettings.sipDialDest||null,uri:softphoneSettings.uri||null,wsServers:softphoneSettings.wsServers||[]};}return null;}};///////////////////////
 // PRIVATE FUNCTIONS //
 ///////////////////////
@@ -73034,7 +73034,7 @@ const callbacks = {};
 for (const key of allCallbacks) {
   callbacks[key] = (...args) => {
     console.log(key);
-    console.log(args);
+    console.log(JSON.stringify(args, null, 2));
   };
 }
 
@@ -73272,7 +73272,8 @@ const store = subx__WEBPACK_IMPORTED_MODULE_2__["default"].create({
     try {
       const r = await rc.get('/restapi/v1.0/account/~/extension/~');
       extensionInfo = r.data;
-      console.log(extensionInfo);
+      console.log('extensionInfo');
+      console.log(JSON.stringify(extensionInfo, null, 2));
     } catch (e) {
       // We don't have a valid RC token
       if (e.data && (e.data.errors || []).some(error => /\btoken\b/i.test(error.message))) {
@@ -73286,29 +73287,32 @@ const store = subx__WEBPACK_IMPORTED_MODULE_2__["default"].create({
     const r2 = await rc.get('/restapi/v1.0/account/~/extension/~/phone-number');
     this.callerNumber = r2.data.records.filter(phoneNumber => ramda__WEBPACK_IMPORTED_MODULE_3__["includes"]('CallerId', phoneNumber.features))[0].phoneNumber;
     _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].authenticateAgentWithRcAccessToken(rc.token().access_token, 'Bearer', authenticateRequest => {
-      console.log(authenticateRequest);
+      console.log(JSON.stringify(authenticateRequest, null, 2));
       _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].openSocket(authenticateRequest.agents[0].agentId, (...args) => {
         console.log('openSocket');
-        console.log(args);
+        console.log(JSON.stringify(args, null, 2));
       });
       const callbackBackup = _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].getCallback('loginPhase1Response');
       _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].setCallback('loginPhase1Response', loginPhase1Response => {
         _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].setCallback('loginPhase1Response', callbackBackup);
         console.log('loginPhase1Response');
-        console.log(loginPhase1Response); // const dialDest = loginPhase1Response.agentSettings.dialDest
-
+        console.log(JSON.stringify(loginPhase1Response, null, 2));
         const availableQueues = loginPhase1Response.inboundSettings.availableQueues;
         this.queueId = availableQueues[0].gateId;
         const availableSkillProfiles = loginPhase1Response.inboundSettings.availableSkillProfiles;
         _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].loginAgent('RC_SOFTPHONE', availableQueues.map(aq => aq.gateId), null, availableSkillProfiles.map(as => as.profileId), null, false, true, (...args) => {
           console.log('loginAgent');
-          console.log(args);
+          console.log(JSON.stringify(args, null, 2));
           _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].setCallback('sipRegisteredCallback', (...args) => {
             console.log('sipRegisteredCallback');
-            console.log(args);
+            console.log(JSON.stringify(args, null, 2));
           });
-          _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].sipInit();
-          _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].sipRegister();
+          _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].getWebRtcInfo((...args) => {
+            console.log('getWebRtcInfo');
+            console.log(args);
+            _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].sipInit();
+            _agentLib__WEBPACK_IMPORTED_MODULE_4__["default"].sipRegister();
+          });
         });
       });
     });
