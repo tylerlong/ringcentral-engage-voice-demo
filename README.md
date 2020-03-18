@@ -49,3 +49,9 @@ yarn release
 ```
 
 The output files will be generated in `./docs` folder and be hosted by GitHub Pages: https://chuntaoliu.com/ringcentral-engage-voice-demo/.
+
+
+
+## Known issues
+
+- Engage Voice AgentLibrary SDK's WebRTC feature is broken at the moment. You cannot use integrated phones.
